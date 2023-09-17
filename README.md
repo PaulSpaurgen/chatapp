@@ -1,10 +1,8 @@
 # Click on the link below to see a preview.
 
     https://melodious-malabi-4e36b8.netlify.app
-
-                    (or)
-
-Clone this repo and navigate to folder conataining pacakage.JSON   and run
+             
+or Clone this repo and navigate to folder conataining pacakage.JSON   and run
 
 ### `npm i`
 
