@@ -1,3 +1,8 @@
+// This is the main function through which entire application is being controlled
+
+//  there are two sections on the application left and right 
+
+
 import { chakra, Flex, Box } from "@chakra-ui/react";
 import ChatList from "./ChatList";
 import ChatBody from "./ChatBody";
@@ -6,6 +11,8 @@ import { useState } from "react";
 
 export default function Main() {
   const { chatData, setChatData } = useChatContext();
+
+
   const [selectedChatId, setSelectedChatId] = useState("");
 
   return (

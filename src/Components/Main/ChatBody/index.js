@@ -21,6 +21,8 @@ export default function ChatBody({ selectedChatId, chatData, setChatData }) {
     }
   }, [selectedChatId,chatData.chats]);
 
+//  Below function is used to clean up the data and sort it w.r.t timestamps
+
   const returnConvoArr = (convoObj) => {
     let convoData = {};
     Object.keys(convoObj)
@@ -34,10 +36,10 @@ export default function ChatBody({ selectedChatId, chatData, setChatData }) {
           [`${val}`]: convoObj[`${val}`],
         };
       });
-    console.log({ convoData });
     return convoData;
   };
 
+//   Below function mimcs hitting an API & adds a reply to the chat 
   const addChat = (val) => {
     setIsLoading(true);
     const tempData = JSON.parse(JSON.stringify(convoData));
@@ -107,7 +109,7 @@ export default function ChatBody({ selectedChatId, chatData, setChatData }) {
   };
 
   return (
-    <chakra.div w="100%" h="100vh" bg="#E4E3E3">
+    <chakra.div w="100%" h="100vh" bg="#E4F1FF">
       {!selectedChatId.length ? (
         <Flex w="100%" h="80%" alignItems="center" justifyContent="center">
           {" "}

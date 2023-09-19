@@ -63,29 +63,28 @@ export default function ChatList({
       return;
     }
     let copyofdata = JSON.parse(JSON.stringify(chatData));
-    const chatId = returnRandomString()
+    const chatId = returnRandomString();
     let newChat = {
       ...copyofdata,
-      chats:{
+      chats: {
         ...copyofdata.chats,
-        [`${chatId}`]:{
+        [`${chatId}`]: {
           chatName: chatName.value,
-          conversation:{}
-        }
-      }
-    }
-    setChatData(newChat)
-    setSelectedChatId(chatId)
+          conversation: {},
+        },
+      },
+    };
+    setChatData(newChat);
+    setSelectedChatId(chatId);
     setChatName({
       value: "",
       isError: false,
     });
-    onCloseAdd()
-    
+    onCloseAdd();
   };
 
   return (
-    <chakra.div w="100%" bg="#7D7C7C" h="100vh" position="relative">
+    <chakra.div w="100%" bg="white" h="100vh" position="relative">
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
@@ -134,7 +133,9 @@ export default function ChatList({
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody padding="5">
-            <Text fontSize="sm" mb="2">Chat Name</Text>
+            <Text fontSize="sm" mb="2">
+              Chat Name
+            </Text>
             <Input
               value={chatName.value}
               onChange={(e) => {
@@ -173,7 +174,7 @@ export default function ChatList({
         w="100%"
         textAlign="center"
         p="5"
-        bg="#191717"
+        bg="#071952"
         borderBottom="1px"
         borderBottomColor="green.900"
         boxShadow="sm"
@@ -205,14 +206,15 @@ export default function ChatList({
               key={chatId}
               p="3"
               fontSize="md"
-              color="white"
               m="2"
               borderRadius="5"
               fontWeight="bold"
-              bg={selectedChatId === chatId ? "#191717" : ""}
+              bg={selectedChatId === chatId ? "#071952" : ""}
+              color={selectedChatId === chatId ? "white" : "balck"}
               boxShadow="md"
               _hover={{
-                backgroundColor: "#191717",
+                backgroundColor: "#071952",
+                color: "white",
                 cursor: "pointer",
               }}
               alignItems="center"
@@ -223,7 +225,11 @@ export default function ChatList({
             >
               <Flex alignItems="center">
                 {" "}
-                <Icon as={AiFillMessage} color="white" mr="2" />{" "}
+                <Icon
+                  as={AiFillMessage}
+                  // color="#071952"
+                  mr="2"
+                />{" "}
                 <chakra.span>{chats[chatId].chatName}</chakra.span>{" "}
               </Flex>
               <IconButton
@@ -245,7 +251,7 @@ export default function ChatList({
           p="4"
           fontSize="lg"
           color="white"
-          bg="#191717"
+          bg="#071952"
           textAlign="center"
           _hover={{
             backgroundColor: "black",
