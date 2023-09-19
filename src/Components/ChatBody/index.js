@@ -1,16 +1,36 @@
 import { chakra, Box, Flex, Text, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import moment from "moment";
-import { returnRandomString } from "../../../Utils/common";
+import { returnRandomString } from "../../Utils/common";
+import { useChatContext } from "../../Contexts/ChatDataProvider";
+import { useParams , useNavigate } from "react-router-dom";
 
-export default function ChatBody({ selectedChatId, chatData, setChatData }) {
+export default function ChatBody() {
+  const navigate = useNavigate()
+  const { chatData, setChatData } = useChatContext();
   const [convoData, setConvoData] = useState({});
   const [inputString, setInputString] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  let { chatId } = useParams();
+  const [selectedChatId, setChatId] = useState("");
+
+  useEffect(() => {
+    if (!!chatId) {
+      console.log({ chatId });
+      setChatId(chatId);
+    }
+  }, [chatId]);
+
   useEffect(() => {
     if (!!selectedChatId.length) {
-      const chats = chatData.chats[`${selectedChatId}`];
+      const chats = chatData?.chats[`${selectedChatId}`] || null;
+
+      if (chats === null) {
+        setChatId("");
+        navigate("/")
+        return;
+      }
       const dataToSet = {
         chatName: chats?.chatName,
         convoArr: returnConvoArr(chats?.conversation),
@@ -19,9 +39,11 @@ export default function ChatBody({ selectedChatId, chatData, setChatData }) {
     } else {
       setConvoData({});
     }
-  }, [selectedChatId,chatData.chats]);
+  }, [selectedChatId, chatData.chats , navigate]);
 
-//  Below function is used to clean up the data and sort it w.r.t timestamps
+ 
+
+  //  Below function is used to clean up the data and sort it w.r.t timestamps
 
   const returnConvoArr = (convoObj) => {
     let convoData = {};
@@ -39,7 +61,7 @@ export default function ChatBody({ selectedChatId, chatData, setChatData }) {
     return convoData;
   };
 
-//   Below function mimcs hitting an API & adds a reply to the chat 
+  //   Below function mimcs hitting an API & adds a reply to the chat
   const addChat = (val) => {
     setIsLoading(true);
     const tempData = JSON.parse(JSON.stringify(convoData));
@@ -118,7 +140,7 @@ export default function ChatBody({ selectedChatId, chatData, setChatData }) {
           </Box>
         </Flex>
       ) : (
-        <Box position="relative" h="100%" >
+        <Box position="relative" h="100%">
           <Box
             p="5"
             borderBottom="1px"
@@ -130,7 +152,13 @@ export default function ChatBody({ selectedChatId, chatData, setChatData }) {
             {convoData?.chatName}
           </Box>
           <Flex w="100%" justifyContent="center">
-            <Box maxWidth="1200px" minWidth="1000px" pr="10" maxH="85vh" overflowY="auto">
+            <Box
+              maxWidth="1200px"
+              minWidth="1000px"
+              pr="10"
+              maxH="85vh"
+              overflowY="auto"
+            >
               {Object.keys(convoData?.convoArr || {}).map((convoId) => (
                 <Flex
                   key={convoId}
@@ -204,8 +232,9 @@ export default function ChatBody({ selectedChatId, chatData, setChatData }) {
               <Input
                 placeholder={isLoading ? "loading..." : "Send message"}
                 w="100%"
-                bg="lightgray"
+                bg="white"
                 p="6"
+                boxShadow="sm"
                 value={inputString}
                 onChange={(e) => {
                   setInputString(e.target.value);

@@ -1,15 +1,24 @@
 import { chakra } from "@chakra-ui/react";
 import { Suspense } from "react";
 import { ChatDataProvider } from "./Contexts/ChatDataProvider";
-import Main from "./Components/Main";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ChatList from "./Components/ChatList";
+import ChatBody from "./Components/ChatBody";
 
 function App() {
   return (
     <chakra.div>
       <Suspense>
-        <ChatDataProvider>
-          <Main />
-        </ChatDataProvider>
+        <BrowserRouter>
+          <ChatDataProvider>
+            <Routes>
+              <Route path="/" element={<ChatList />}>
+                <Route index element={<ChatBody />} />
+                <Route path=":chatId" element={<ChatBody />} />
+              </Route>
+            </Routes>
+          </ChatDataProvider>
+        </BrowserRouter>
       </Suspense>
     </chakra.div>
   );

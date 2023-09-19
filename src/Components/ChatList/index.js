@@ -17,40 +17,58 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { returnRandomString } from "../../../Utils/common";
-
+import { returnRandomString } from "../../Utils/common";
+import { useChatContext } from "../../Contexts/ChatDataProvider";
+import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams,useNavigate  } from "react-router-dom";
 import {
   AiFillMessage,
   AiFillDelete,
   AiOutlinePlusSquare,
 } from "react-icons/ai";
 
-export default function ChatList({
-  chatData,
-  setSelectedChatId,
-  setChatData,
-  selectedChatId,
-}) {
+export default function ChatList() {
+  const { chatData, setChatData } = useChatContext();
   const chats = chatData?.chats || {};
+  const navigate = useNavigate()
+
+  // const [chatData,setChatData] = useState({})
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [chatName, setChatName] = useState({
     value: "",
     isError: false,
   });
 
+  let { chatId } = useParams();
+  const [selectedChatId, setChatId] = useState("");
+
+  useEffect(() => {
+    if (!!chatId) {
+      console.log({ chatId });
+      setChatId(chatId);
+    }
+    console.log(  "chat list", {chatId})
+  }, [chatId]);
+
   const {
     isOpen: isOpenAdd,
     onOpen: onOpenAdd,
     onClose: onCloseAdd,
   } = useDisclosure();
-  //
+  
+  const navigateToSelected = (path) =>{
+    navigate(`/${path}`)
+  }
+
+
 
   const deleteChat = () => {
     let copyofdata = JSON.parse(JSON.stringify(chatData));
     delete copyofdata.chats[`${selectedChatId}`];
     console.log({ copyofdata });
     setChatData(copyofdata);
-    setSelectedChatId("");
+    navigateToSelected("");
     onClose();
   };
 
@@ -75,7 +93,7 @@ export default function ChatList({
       },
     };
     setChatData(newChat);
-    setSelectedChatId(chatId);
+    navigateToSelected(chatId);
     setChatName({
       value: "",
       isError: false,
@@ -84,7 +102,7 @@ export default function ChatList({
   };
 
   return (
-    <chakra.div w="100%" bg="white" h="100vh" position="relative">
+    <chakra.div w="100%" bg="white" h="100vh">
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
@@ -170,103 +188,118 @@ export default function ChatList({
         </ModalContent>
       </Modal>
 
-      <Box
-        w="100%"
-        textAlign="center"
-        p="5"
-        bg="#071952"
-        borderBottom="1px"
-        borderBottomColor="green.900"
-        boxShadow="sm"
-      >
-        <Text color="white" fontWeight="bold" letterSpacing="1px" fontSize="lg">
-          Welcome {chatData?.userName || "User"}
-        </Text>
-      </Box>
-
-      {!Object.keys(chats).length ? (
-        <Flex w="100%" h="60vh" justifyContent="center" alignItems="center">
+      <Flex w="100%">
+        <Box w="20%" position="relative" boxShadow="sm" borderRight="1px" borderColor="gray.100">
           <Box
+            w="100%"
+            textAlign="center"
             p="5"
-            m="2"
-            borderRadius="5"
-            color="white"
-            boxShadow="md"
-            fontSize="sm"
+            bg="#071952"
+            borderBottom="1px"
+            borderBottomColor="green.900"
+            boxShadow="sm"
           >
-            <Text w="80%">
-              No Chats found, Please click on add new chat below to continue
+            <Text
+              color="white"
+              fontWeight="bold"
+              letterSpacing="1px"
+              fontSize="lg"
+            >
+              Welcome {chatData?.userName || "User"}
             </Text>
           </Box>
-        </Flex>
-      ) : (
-        <Box maxH="85vh" overflowY="auto">
-          {Object.keys(chats).map((chatId) => (
+
+          {!Object.keys(chats).length ? (
+            <Flex w="100%" h="60vh" justifyContent="center" alignItems="center">
+              <Box
+                p="5"
+                m="2"
+                borderRadius="5"
+                color="white"
+                boxShadow="md"
+                fontSize="sm"
+              >
+                <Text w="80%">
+                  No Chats found, Please click on add new chat below to continue
+                </Text>
+              </Box>
+            </Flex>
+          ) : (
+            <Box maxH="85vh" overflowY="auto">
+              {Object.keys(chats).map((chatId) => (
+                <Flex
+                  key={chatId}
+                  p="3"
+                  fontSize="md"
+                  m="2"
+                  borderRadius="5"
+                  fontWeight="bold"
+                  bg={selectedChatId === chatId ? "#071952" : ""}
+                  color={selectedChatId === chatId ? "white" : "balck"}
+                  boxShadow="md"
+                  _hover={{
+                    backgroundColor: "#071952",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                  alignItems="center"
+                  onClick={() => {
+                    navigateToSelected(chatId);
+                  }}
+                  justifyContent="space-between"
+                >
+                  <Flex alignItems="center">
+                    {" "}
+                    <Icon
+                      as={AiFillMessage}
+                      // color="#071952"
+                      mr="2"
+                    />{" "}
+                    <chakra.span>{chats[chatId].chatName}</chakra.span>{" "}
+                  </Flex>
+                  <IconButton
+                    colorScheme="red"
+                    aria-label="delte Segun"
+                    icon={<AiFillDelete />}
+                    size="xs"
+                    onClick={() => {
+                      onOpen();
+                    }}
+                  />
+                </Flex>
+              ))}
+            </Box>
+          )}
+
+          <Box position="absolute" bottom="0" w="100%" zIndex={10}>
             <Flex
-              key={chatId}
-              p="3"
-              fontSize="md"
-              m="2"
-              borderRadius="5"
-              fontWeight="bold"
-              bg={selectedChatId === chatId ? "#071952" : ""}
-              color={selectedChatId === chatId ? "white" : "balck"}
-              boxShadow="md"
+              p="4"
+              fontSize="lg"
+              color="white"
+              bg="#071952"
+              textAlign="center"
               _hover={{
-                backgroundColor: "#071952",
-                color: "white",
+                backgroundColor: "black",
                 cursor: "pointer",
               }}
               alignItems="center"
+              justifyContent="center"
               onClick={() => {
-                setSelectedChatId(chatId);
+                onOpenAdd();
               }}
-              justifyContent="space-between"
             >
-              <Flex alignItems="center">
-                {" "}
-                <Icon
-                  as={AiFillMessage}
-                  // color="#071952"
-                  mr="2"
-                />{" "}
-                <chakra.span>{chats[chatId].chatName}</chakra.span>{" "}
-              </Flex>
-              <IconButton
-                colorScheme="red"
-                aria-label="delte Segun"
-                icon={<AiFillDelete />}
-                size="xs"
-                onClick={() => {
-                  onOpen();
-                }}
-              />
+              <Icon as={AiOutlinePlusSquare} color="white" mr="2" />
+              <chakra.span>New Chat </chakra.span>
             </Flex>
-          ))}
+          </Box>
         </Box>
-      )}
+        <Box w="80%">
+        <Outlet/> 
 
-      <Box position="absolute" bottom="0" w="100%" zIndex={10}>
-        <Flex
-          p="4"
-          fontSize="lg"
-          color="white"
-          bg="#071952"
-          textAlign="center"
-          _hover={{
-            backgroundColor: "black",
-            cursor: "pointer",
-          }}
-          alignItems="center"
-          justifyContent="center"
-          onClick={() => {
-            onOpenAdd();
-          }}
-        >
-          <Icon as={AiOutlinePlusSquare} color="white" mr="2" />
-          <chakra.span>New Chat </chakra.span>
-        </Flex>
-      </Box>
+        </Box>
+      </Flex>
+
+      {/* */}
     </chakra.div>
   );
 }
