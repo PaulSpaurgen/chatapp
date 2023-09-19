@@ -5,6 +5,8 @@ import { returnRandomString } from "../../Utils/common";
 import { useChatContext } from "../../Contexts/ChatDataProvider";
 import { useParams , useNavigate } from "react-router-dom";
 
+//  Right side section (Chat Body) is declared in this section.
+
 export default function ChatBody() {
   const navigate = useNavigate()
   const { chatData, setChatData } = useChatContext();

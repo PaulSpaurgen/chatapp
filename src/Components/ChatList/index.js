@@ -28,6 +28,8 @@ import {
   AiOutlinePlusSquare,
 } from "react-icons/ai";
 
+//  Left side section (Chat Listings) is declared in this section.
+
 export default function ChatList() {
   const { chatData, setChatData } = useChatContext();
   const chats = chatData?.chats || {};

@@ -5,6 +5,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ChatList from "./Components/ChatList";
 import ChatBody from "./Components/ChatBody";
 
+// I have declared all the routes here
+
+
 function App() {
   return (
     <chakra.div>

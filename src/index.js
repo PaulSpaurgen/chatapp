@@ -4,6 +4,10 @@ import { ChakraProvider } from "@chakra-ui/react";
 import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// This where the appliaction starts.
+//  Navigate to app.js to go more in detail
+
 root.render(
   <React.StrictMode>
     <ChakraProvider>
@@ -12,6 +16,3 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
