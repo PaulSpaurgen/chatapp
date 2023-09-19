@@ -131,7 +131,7 @@ export default function ChatBody() {
   };
 
   return (
-    <chakra.div w="100%" h="100vh" bg="#E4F1FF">
+    <chakra.div w="100%" h="100vh" bg="white">
       {!selectedChatId.length ? (
         <Flex w="100%" h="80%" alignItems="center" justifyContent="center">
           {" "}
@@ -232,7 +232,7 @@ export default function ChatBody() {
               <Input
                 placeholder={isLoading ? "loading..." : "Send message"}
                 w="100%"
-                bg="white"
+                bg="gray.100"
                 p="6"
                 boxShadow="sm"
                 value={inputString}
